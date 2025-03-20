@@ -19,6 +19,14 @@ def chat():
 
     # Generate AI response
     response = ollama.chat(model='mistral', messages=conversation_history)
+
+# Ensure we extract only the content as a string
+if isinstance(response, dict) and 'message' in response and 'content' in response['message']:
+    bot_response = response['message']['content']
+else:
+    bot_response = "⚠️ AI Response Unavailable"
+
+return jsonify({"response": bot_response})
     bot_response = response.get("message", "I couldn't process that.")
 
     # Add AI response to history
