@@ -1,9 +1,10 @@
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
     const chatBox = document.getElementById("chat-box");
     const userInput = document.getElementById("user-input");
     const sendBtn = document.getElementById("send-btn");
-    
-    const API_URL = "http://172.28.0.12:5000";
+
+    // Use the correct API URL from Google Colab
+    const API_URL = "http://172.28.0.12:5000/chat";  // Update if Colab changes
 
     function appendMessage(sender, message) {
         const msgDiv = document.createElement("div");
@@ -27,20 +28,15 @@ document.addEventListener("DOMContentLoaded", function() {
                 body: JSON.stringify({ message: userMessage }),
             });
 
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-
             const data = await response.json();
-            appendMessage("ResonAI", data.response || "⚠ AI Response Unavailable");
+            appendMessage("ResonAI", data.response);
         } catch (error) {
-            console.error("Error connecting to AI:", error);
             appendMessage("System", "⚠ Unable to reach AI. Try again later.");
         }
     }
 
     sendBtn.addEventListener("click", sendMessage);
-    userInput.addEventListener("keypress", (event) => {
+    userInput.addEventListener("keypress", function (event) {
         if (event.key === "Enter") sendMessage();
     });
 });
