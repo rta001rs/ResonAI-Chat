@@ -24,7 +24,7 @@ def chat():
     # Add AI response to history
     conversation_history.append({"role": "assistant", "content": bot_response})
 
-    return jsonify({"response": str(bot_response)})
+    return jsonify({"response": str(bot_response['message'])})
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
