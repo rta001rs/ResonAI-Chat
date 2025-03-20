@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const sendBtn = document.getElementById("send-btn");
 
     // Point to Render AI backend
-    const API_URL = "https://resonai-api.onrender.com/chat"; 
+    const API_URL = "https://resonai-chat.onrender.com"; 
 
     function appendMessage(sender, message) {
         const msgDiv = document.createElement("div");
