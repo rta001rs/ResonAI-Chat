@@ -1,9 +1,13 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-import ollama
+import openai
+import os
 
 app = Flask(__name__)
 CORS(app)  # Enable CORS for cross-origin requests
+
+# Set your OpenAI API Key
+openai.api_key = os.getenv("openai.api_key = os.getenv("OPENAI_API_KEY") # Replace with actual API key
 
 # Optimize memory usage
 MAX_HISTORY = 5
@@ -18,20 +22,18 @@ def chat():
     if not user_message:
         return jsonify({"response": "⚠️ Please provide a valid message."})
 
-    # Maintain only the last 5 messages to prevent slow processing
+    # Maintain conversation history
     conversation_history.append({"role": "user", "content": user_message})
     conversation_history = conversation_history[-MAX_HISTORY:]
 
     try:
-        # AI Response Optimization
-        response = ollama.chat(
-            model="mistral",
-            messages=conversation_history,
-            options={"num_predict": 64}  # Reduce response size for faster processing
+        # Generate AI Response using OpenAI GPT
+        response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",  # You can upgrade to GPT-4 if needed
+            messages=conversation_history
         )
 
-        # Extract response safely
-        bot_response = response.get("message", {}).get("content", "⚠️ AI Response Unavailable")
+        bot_response = response['choices'][0]['message']['content']
 
         # Store response & trim history
         conversation_history.append({"role": "assistant", "content": bot_response})
